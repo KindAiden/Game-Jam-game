@@ -665,13 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ffb4940d5a4cc4a95d10519e75d7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  good: []
-  bad: []
-  mode: 
-  turnOrder: []
-  moves: []
-  textArea: {fileID: 470490615}
-  text: {fileID: 470490616}
+  battleText: {fileID: 470490616}
 --- !u!4 &658962003
 Transform:
   m_ObjectHideFlags: 0
