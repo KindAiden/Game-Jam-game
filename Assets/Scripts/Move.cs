@@ -6,5 +6,16 @@ public class Move : MonoBehaviour
 {
     public string name;
     public int ATK;
+    public categories category;
     public string effect;
+    public int amountOfTargets;
+    public List<Warior> targets = new List<Warior>();
+    public Warior user;
+
+    public enum categories
+    {
+        Attack,
+        Heal,
+        Spell,
+    }
 }
