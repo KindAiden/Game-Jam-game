@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
@@ -18,6 +19,26 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //testing
+        Warior newWarior = new Warior();
+        newWarior.HP = 100;
+        newWarior.ATK = 2;
+        newWarior.DEF = 1;
+        newWarior.SPD = 4;
+        newWarior.EXP = 20;
+        newWarior.level = 2;
+        Move punch = new Move();
+        punch.name = "punch";
+        punch.ATK = 3;
+        punch.category = Move.categories.Attack;
+        punch.amountOfTargets = 1;
+        Move kick = new Move();
+        kick.name = "kick";
+        kick.ATK = 5;
+        kick.category = Move.categories.Attack;
+        kick.amountOfTargets = 1;
+
+
         foreach (Warior warior in GameManager.playerParty)
             good.Add(warior);
 
@@ -33,15 +54,20 @@ public class BattleManager : MonoBehaviour
         {
             case "Start":
                 text.text = $"{bad[0].name} attacks!";
+                mode = "Wait";
+                break;
+
+            case "Wait":
                 break;
 
             case "GetTurnOrder":
                 GetTurnOrder();
-                mode = "PlayMoves";
+                mode = "GetMoves";
                 break;
 
             case "GetMoves":
                 GetMoves();
+                mode = "PlayMoves";
                 break;
 
             case "PlayMoves":
@@ -56,7 +82,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public IEnumerator PlayMove()
+    IEnumerator PlayMove()
     {
         foreach (Move move in moves)
         {
@@ -81,8 +107,18 @@ public class BattleManager : MonoBehaviour
 
                 // check if the target is dead
                 if (target.HP <= 0)
-                    good.Remove(target);
-                    bad.Remove(target);
+                {
+                    if (good.Contains(target))
+                        good.Remove(target);
+                    else
+                        bad.Remove(target);
+
+                    if (good.Count == 0)
+                        mode = "Lose";
+                    if (bad.Count == 0)
+                        mode = "Win";
+                }
+                    
             }
             //wait for player input
             while (!Input.GetKey(KeyCode.Space))
@@ -90,7 +126,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void GetMoves()
+    void GetMoves()
     {
         foreach (Warior warior in turnOrder)
         {
@@ -107,7 +143,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void GetTurnOrder()
+    void GetTurnOrder()
     {
         turnOrder = new List<Warior>();
 
@@ -118,5 +154,15 @@ public class BattleManager : MonoBehaviour
             turnOrder.Add(character);
 
         turnOrder.Sort((a, b) => b.SPD.CompareTo(a.SPD));
+    }
+
+    public void Run()
+    {
+
+    }
+
+    public void Attack()
+    {
+        mode = "GetTurnOrder";
     }
 }
